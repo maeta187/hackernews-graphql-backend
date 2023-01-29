@@ -4,13 +4,20 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node ./src/server.js"
+    "start": "node ./src/server.js",
+    "migrate": "npx prisma migrate dev",
+    "generate": "npx prisma generate",
+    "studio": "npx prisma studio"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^4.9.0",
     "apollo-server": "^2.26.1",
     "graphql": "^14.7.0"
+  },
+  "devDependencies": {
+    "prisma": "^4.9.0"
   }
 }

@@ -1,6 +1,11 @@
 
 /node_modules
 
+/prisma/database
+/prisma/migrations
+
+.env
+
 .DS_Store
 
 .vscode
