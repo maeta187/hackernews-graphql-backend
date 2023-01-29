@@ -22,6 +22,8 @@ const typeDefs = gql`
     feed: [Link]!
   }
 
+  type Mutation {
+    post(url: String!, description: String!): Link
   }
 `
 
@@ -31,6 +33,19 @@ const resolvers = {
     info: () => 'HackerNewsクローン',
     feed: () => links
   },
+  Mutation: {
+    post: (parent, args) => {
+      let idCount = links.length
+
+      const link = {
+        id: `link-${idCount++}`,
+        description: args.description,
+        url: args.url
+      }
+
+      links = [...links, link]
+      return link
+    }
   }
 }
 
