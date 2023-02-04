@@ -5,6 +5,13 @@ type Link {
   url: String
   postedBy: User
 }
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  links: [Link!]!
+}
 }
 
 type Query {
