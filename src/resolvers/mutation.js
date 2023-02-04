@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
-APP_SECRETS = 'Graphql'
+const APP_SECRETS = require('../utils')
 
 // ユーザーの新規登録のリゾルバ
 async function signup(parent, args, context) {
@@ -48,3 +48,20 @@ async function login(parent, args, context) {
   }
 }
 
+// ニュースを投稿するリゾルバ
+async function post(parent, args, context) {
+  const { userId } = context
+  return await context.prisma.link.create({
+    data: {
+      url: args.url,
+      description: args.description,
+      postedBy: { connect: { id: userId } }
+    }
+  })
+}
+
+module.exports = {
+  signup,
+  login,
+  post
+}
