@@ -12,6 +12,10 @@ type User {
   email: String!
   links: [Link!]!
 }
+
+type AutoPayload {
+  token: String
+  user: User
 }
 
 type Query {
