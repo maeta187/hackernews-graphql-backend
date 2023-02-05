@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 
-const APP_SECRETS = 'Graphql'
+const APP_SECRET = 'Graphql-is-aw3some'
 
 // ユーザーIDを取得するための関数
 function getUserId(req, authToken) {
@@ -18,7 +18,7 @@ function getUserId(req, authToken) {
       return userId
     }
   } else if (authToken) {
-    const { userId } = getTokenPayload(toauthTokenken)
+    const { userId } = getTokenPayload(authToken)
     return userId
   }
   throw new Error('認証権限がありません')
@@ -27,10 +27,10 @@ function getUserId(req, authToken) {
 // トークンを複合する関数
 function getTokenPayload(token) {
   // トークン化された物の前の情報(user.id)を複合する
-  return jwt.verify(token, APP_SECRETS)
+  return jwt.verify(token, APP_SECRET)
 }
 
 module.exports = {
-  APP_SECRETS,
+  APP_SECRET,
   getUserId
 }

@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
-const APP_SECRETS = require('../utils')
+const { APP_SECRET } = require('../utils')
 
 // ユーザーの新規登録のリゾルバ
 async function signup(parent, args, context) {
@@ -16,7 +16,7 @@ async function signup(parent, args, context) {
     }
   })
 
-  const token = jwt.sign({ userId: user.id }, APP_SECRETS)
+  const token = jwt.sign({ userId: user.id }, APP_SECRET)
 
   return {
     token,
@@ -33,14 +33,14 @@ async function login(parent, args, context) {
     throw new Error('そのようなユーザーは存在しません')
   }
 
-  // パスワードの比較
-  const valid = await bcrypt.compare(args.password, user.parent)
+  //入力するパスワードと設定されているパスワードを比較
+  const valid = await bcrypt.compare(args.password, user.password)
   if (!valid) {
-    throw new Error('無効なパスワード')
+    throw new Error('無効なパスワードです')
   }
 
-  // パスワードが正しいとき
-  const token = jwt.sign({ userId: user.id }, APP_SECRETS)
+  //パスワードが正しければ
+  const token = jwt.sign({ userId: user.id }, APP_SECRET)
 
   return {
     token,
