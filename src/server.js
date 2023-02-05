@@ -5,32 +5,31 @@ const path = require('path')
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
+const { getUserId } = require('./utils')
+
+// リゾルバ関係のファイル
+const Query = require('./resolvers/Query')
+const Mutation = require('./resolvers/Mutation')
+const Link = require('./resolvers/Link')
+const User = require('./resolvers/User')
+
 // resolver関数
 const resolvers = {
-  Query: {
-    info: () => 'HackerNewsクローン',
-    feed: async (package, args, context) => {
-      return context.prisma.link.findMany()
-    }
-  },
-  Mutation: {
-    post: (parent, args, context) => {
-      const newLink = context.prisma.link.create({
-        data: {
-          url: args.url,
-          description: args.description
-        }
-      })
-      return newLink
-    }
-  }
+  Query,
+  Mutation,
+  Link,
+  User
 }
 
 const server = new ApolloServer({
   typeDefs: fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf-8'),
   resolvers,
-  context: {
-    prisma
+  context: ({ req }) => {
+    return {
+      ...req,
+      prisma,
+      userId: req && req.headers.authorization ? getUserId(req) : null
+    }
   }
 })
 
