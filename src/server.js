@@ -1,24 +1,29 @@
-const { ApolloServer, gql } = require('apollo-server')
+const { ApolloServer, PubSub, gql } = require('apollo-server')
 const fs = require('fs')
 const path = require('path')
 
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
+// サブスクリプションの実装
+// Publisher(送信者)/Subscriber(受信者)
+const pubsub = new PubSub()
 
 const { getUserId } = require('./utils')
 
 // リゾルバ関係のファイル
-const Query = require('./resolvers/Query')
-const Mutation = require('./resolvers/Mutation')
 const Link = require('./resolvers/Link')
 const User = require('./resolvers/User')
+const Query = require('./resolvers/Query')
+const Mutation = require('./resolvers/Mutation')
+const Subscription = require('./resolvers/Subscription')
 
 // resolver関数
 const resolvers = {
+  Link,
+  User,
   Query,
   Mutation,
-  Link,
-  User
+  Subscription
 }
 
 const server = new ApolloServer({
@@ -28,6 +33,7 @@ const server = new ApolloServer({
     return {
       ...req,
       prisma,
+      pubsub,
       userId: req && req.headers.authorization ? getUserId(req) : null
     }
   }
