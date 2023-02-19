@@ -4,6 +4,7 @@ type Link {
   description: String!
   url: String
   postedBy: User
+  votes: [Vote!]!
 }
 
 type User {
@@ -18,6 +19,12 @@ type AutoPayload {
   user: User
 }
 
+type Vote {
+  id: ID!
+  link: Link!
+  user: User!
+}
+
 type Query {
   info: String!
   feed: [Link]!
@@ -27,8 +34,10 @@ type Mutation {
   post(url: String!, description: String!): Link
   signup(email: String!, password: String!, name: String!): AutoPayload
   login(email: String!, password: String): AutoPayload
+  vote(linkId: ID!): Vote
 }
 
 type Subscription {
   newLink: Link
+  newVote: Vote
 }

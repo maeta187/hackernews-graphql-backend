@@ -16,6 +16,7 @@ const User = require('./resolvers/User')
 const Query = require('./resolvers/Query')
 const Mutation = require('./resolvers/Mutation')
 const Subscription = require('./resolvers/Subscription')
+const Vote = require('./resolvers/Vote')
 
 // resolver関数
 const resolvers = {
@@ -23,7 +24,8 @@ const resolvers = {
   User,
   Query,
   Mutation,
-  Subscription
+  Subscription,
+  Vote
 }
 
 const server = new ApolloServer({
