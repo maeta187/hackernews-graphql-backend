@@ -67,21 +67,21 @@ async function post(parent, args, context) {
 }
 
 async function vote(parent, args, context) {
-  const userId = context.userId
-  // WARNING:下記の処理のコメントを有効にすると、投票が行え無いので一旦コメントアウト
-  // const vote = context.prisma.vote.findUnique({
-  //   where: {
-  //     linkID_userID: {
-  //       linkId: Number(args.linkId),
-  //       userId: userId
-  //     }
-  //   }
-  // })
+  const { userId } = context
 
-  // // 2回投票を防ぐ
-  // if (Boolean(vote)) {
-  //   throw new Error(`すでにその投稿は投票されています:${args.linkId}`)
-  // }
+  const vote = await context.prisma.vote.findUnique({
+    where: {
+      linkId_userId: {
+        linkId: Number(args.linkId),
+        userId: userId
+      }
+    }
+  })
+
+  // 2回投票を防ぐ
+  if (Boolean(vote)) {
+    throw new Error(`すでにその投稿は投票されています:${args.linkId}`)
+  }
 
   // 投票する
   const newVote = context.prisma.vote.create({
